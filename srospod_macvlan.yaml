@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-sros-macvlan
+  annotations:
+    # note that vrnetlab requires dataplane interfaces to have the name eth1..n
+    k8s.v1.cni.cncf.io/networks: |
+      [
+        {"name":"macvlan-251", "interface": "eth1"},
+        {"name":"macvlan-252", "interface": "eth2"},
+        {"name":"macvlan-253", "interface": "eth3"},
+        {"name":"macvlan-254", "interface": "eth4"}
+      ]
+spec:
+  # volumes:
+  # - name: tftpboot	  # The name of the volume
+  #   hostPath:         # Use hostpath for testing, should become a configmap
+  #    path: /home/tftpboot           # directory location on host
+  volumes:
+  - name: tftpboot	  # The name of the volume
+    configMap:
+        name: sros-tftpboot
+  initContainers:
+  - name: init-sysctl
+    image: busybox
+    imagePullPolicy: IfNotPresent
+    command: ["sysctl", "-w", "net.ipv4.ip_forward=1"]
+    securityContext:
+      privileged: true     
+  containers:
+  - name: sros-macvlan-01
+    image: nexus.vno.com:9091/vrnetlab/vr-sros:21.2R2
+    args:
+    - --trace
+    - --hostname
+    - sros01
+    - --username
+    - admin
+    - --password
+    - admin
+    - --connection-mode
+    - tc
+    - --variant
+    - ixr-e-small
+    env:
+    - name: CLAB_INTFS          # number of dataplane interfaces, used by vrnetlab to mirror net<n> interfaces to the VM's tap<n> interfaces
+      value: "2"
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: tftpboot
+      mountPath: /tftpboot

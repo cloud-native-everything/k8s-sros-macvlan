@@ -1,0 +1,406 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sros-tftpboot
+data:
+  license.txt: "00000000-0000-0000-0000-000000000000 KABkAqcB6QrAABwAQ0JeVC4xECsOKWg0JQdTNXk1Jyw9BBRWAQApADAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMAAAAAADAAUAAAAAAMAAFABFZ2J8c3spF15MXydIOj5OBQAcAMe1H2EAAAAAAAAAAAAAAAD/jw1iAAAAAAQAFABUaU1PUy1bQkNdLTIxLioAwAAkACJYA19yMyN6DGtaa31JcQEIKkwUVBkpFHcZYVAdOQ8GAgASAE5PS0lBIEJFTEwgTlYAAAAGAAwAAQABAAAAAADAACQAGmBpfT4gPy9CRQVRJwJgCEJ1dhFKUjFjYH1zRl1Dcn4PAF0BTERDMUN6RkFJM205YTNMWkJGUW1vcHV6Z3QxSVlvMlpHSHRLdmNrUEFBaDNuTmRRbnM1a0YvS00rbGVDTURHaE9nUUNoNkRKaDZSVVZGM0dMc0Vqanh5bjJac1BCUmFjNEZhdFA1UG1QeXM4WVMrMnRtdDhZQm9JcVV3MmhYcVFBclpWaGxFRVhCNWNmYVdyTWRvcW9kMUV0dHdIRnN6YXdaVy9Xc3l1blp1V1VvcXljbi9yb050bC9Gd2k3U1BzUWlvKzdqaDlFd3ppTy9mdmtKM1JkSzhmell4S2RYUWZzaXpZRDRZcHNpZ2F2cFBzY0pjOWpjL3h2a0FWV0FWekRQOXQzaVFyeVRYQkR6dVFoc3Q5RHdIZ1Voc3MxYi9RbmVNZUxvR1o5NDBuNmJBYTFoc0NoTVhmUGt1OVZoYVlqTkErRzZSb3BtVldVMDRsRXZUb1pBPT0AAAAA # NOKIA BELL NV(TiMOS-[BC]-21.*)00000000-0000-0000-0000-000000000000 KABkAqcB6QrAABwAQ0JeVC4xECsOKWg0JQdTNXk1Jyw9BBRWAQApADAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMAAAAAADAAUAAAAAAMAAFABFZ2J8c3spF15MXydIOj5OBQAcAMe1H2EAAAAAAAAAAAAAAAD/jw1iAAAAAAQAFABUaU1PUy1bQkNdLTIxLioAwAAkACJYA19yMyN6DGtaa31JcQEIKkwUVBkpFHcZYVAdOQ8GAgASAE5PS0lBIEJFTEwgTlYAAAAGAAwAAQABAAAAAADAACQAGmBpfT4gPy9CRQVRJwJgCEJ1dhFKUjFjYH1zRl1Dcn4PAF0BTERDMUN6RkFJM205YTNMWkJGUW1vcHV6Z3QxSVlvMlpHSHRLdmNrUEFBaDNuTmRRbnM1a0YvS00rbGVDTURHaE9nUUNoNkRKaDZSVVZGM0dMc0Vqanh5bjJac1BCUmFjNEZhdFA1UG1QeXM4WVMrMnRtdDhZQm9JcVV3MmhYcVFBclpWaGxFRVhCNWNmYVdyTWRvcW9kMUV0dHdIRnN6YXdaVy9Xc3l1blp1V1VvcXljbi9yb050bC9Gd2k3U1BzUWlvKzdqaDlFd3ppTy9mdmtKM1JkSzhmell4S2RYUWZzaXpZRDRZcHNpZ2F2cFBzY0pjOWpjL3h2a0FWV0FWekRQOXQzaVFyeVRYQkR6dVFoc3Q5RHdIZ1Voc3MxYi9RbmVNZUxvR1o5NDBuNmJBYTFoc0NoTVhmUGt1OVZoYVlqTkErRzZSb3BtVldVMDRsRXZUb1pBPT0AAAAA # NOKIA BELL NV(TiMOS-[BC]-21.*)"
+  config.txt: |
+    # TiMOS-C-21.2.R2 cpm/x86_64 Nokia 7250 IXR Copyright (c) 2000-2021 Nokia.
+    # All rights reserved. All use subject to applicable license agreements.
+    # Built on Wed Mar 31 11:19:37 PDT 2021 by builder in /builds/c/212B/R2/panos/main/sros
+    # Configuration format version 21.2 revision 0
+
+    # Generated THU AUG 26 14:04:29 2021 UTC
+
+    exit all
+    configure
+    #--------------------------------------------------
+    echo "System Configuration"
+    #--------------------------------------------------
+        system
+            name "sros"
+            netconf
+                auto-config-save
+                no shutdown
+            exit
+            snmp
+                streaming
+                    no shutdown
+                exit
+                packet-size 9216
+            exit
+            time
+                sntp
+                    shutdown
+                exit
+                zone UTC
+            exit
+        exit
+    #--------------------------------------------------
+    echo "System Security Configuration"
+    #--------------------------------------------------
+        system
+            security
+                profile "administrative"
+                    netconf
+                        base-op-authorization
+                            kill-session
+                            lock
+                        exit
+                    exit
+                    entry 10
+                        match "configure system security"
+                        action permit
+                    exit
+                    entry 20
+                        match "show system security"
+                        action permit
+                    exit
+                    entry 30
+                        match "tools perform security"
+                        action permit
+                    exit
+                    entry 40
+                        match "tools dump security"
+                        action permit
+                    exit
+                    entry 50
+                        match "admin system security"
+                        action permit
+                    exit
+                    entry 100
+                        match "configure li"
+                        action deny
+                    exit
+                    entry 110
+                        match "show li"
+                        action deny
+                    exit
+                    entry 111
+                        match "clear li"
+                        action deny
+                    exit
+                    entry 112
+                        match "tools dump li"
+                        action deny
+                    exit
+                exit
+                user "admin"
+                    password "$2y$10$TQrZlpBDra86.qoexZUzQeBXDY1FcdDhGWdD9lLxMuFyPVSm0OGy6"
+                    access console ftp snmp netconf grpc
+                    console
+                        member "administrative"
+                    exit
+                exit
+                user "vrnetlab"
+                    password "$2y$10$HEy0pGc15at.OveyLzXIU.YvJMW3HC35S3GMeJIcqLIolHwy81c/u"
+                    access console netconf
+                    console
+                        member "administrative"
+                        member "default"
+                    exit
+                exit
+            exit
+        exit
+    #--------------------------------------------------
+    echo "System Login Control Configuration"
+    #--------------------------------------------------
+        system
+            login-control
+                ssh
+                    inbound-max-sessions 30
+                exit
+            exit
+        exit
+    #--------------------------------------------------
+    echo "Log Configuration"
+    #--------------------------------------------------
+        log
+        exit
+    #--------------------------------------------------
+    echo "System gRPC Configuration"
+    #--------------------------------------------------
+        system
+            grpc
+                allow-unsecure-connection
+                gnmi
+                    auto-config-save
+                    no shutdown
+                exit
+                no shutdown
+            exit
+        exit
+    #--------------------------------------------------
+    echo "Card Configuration"
+    #--------------------------------------------------
+        card 1
+            card-type imm14-10g-sfp++4-1g-tx
+            mda 1
+                no shutdown
+            exit
+            no shutdown
+        exit
+    #--------------------------------------------------
+    echo "Port Configuration"
+    #--------------------------------------------------
+        port 1/1/1
+            ethernet
+                mode access
+            exit
+            no shutdown
+        exit
+        port 1/1/2
+            ethernet
+                mode access
+            exit
+            no shutdown
+        exit
+        port 1/1/3
+            ethernet
+                mode access
+            exit
+            no shutdown
+        exit
+        port 1/1/4
+            ethernet
+                mode access
+            exit
+            no shutdown
+        exit
+        port 1/1/5
+            shutdown
+            ethernet
+            exit
+        exit
+        port 1/1/6
+            shutdown
+            ethernet
+            exit
+        exit
+        port 1/1/7
+            shutdown
+            ethernet
+            exit
+        exit
+        port 1/1/8
+            shutdown
+            ethernet
+            exit
+        exit
+        port 1/1/9
+            shutdown
+            ethernet
+            exit
+        exit
+        port 1/1/10
+            shutdown
+            ethernet
+            exit
+        exit
+        port 1/1/11
+            shutdown
+            ethernet
+            exit
+        exit
+        port 1/1/12
+            shutdown
+            ethernet
+            exit
+        exit
+        port 1/1/13
+            shutdown
+            ethernet
+            exit
+        exit
+        port 1/1/14
+            shutdown
+            ethernet
+            exit
+        exit
+        port 1/1/15
+            shutdown
+            ethernet
+            exit
+        exit
+        port 1/1/16
+            shutdown
+            ethernet
+            exit
+        exit
+        port 1/1/17
+            shutdown
+            ethernet
+            exit
+        exit
+        port 1/1/18
+            shutdown
+            ethernet
+            exit
+        exit
+    #--------------------------------------------------
+    echo "System Sync-If-Timing Configuration"
+    #--------------------------------------------------
+        system
+            sync-if-timing
+                begin
+                commit
+            exit
+        exit
+    #--------------------------------------------------
+    echo "Management Router Configuration"
+    #--------------------------------------------------
+        router management
+        exit
+
+    #--------------------------------------------------
+    echo "Router (Network Side) Configuration"
+    #--------------------------------------------------
+        router Base
+            interface "system"
+                no shutdown
+            exit
+        exit
+
+    #--------------------------------------------------
+    echo "Service Configuration"
+    #--------------------------------------------------
+        service
+            customer 1 name "home1" create
+                description "Home1"
+            exit
+            customer 2 name "home2" create
+                description "Home2"
+            exit
+            customer 3 name "hq1" create
+                description "HQ offices 1"
+            exit
+            customer 4 name "hq2" create
+                description "HQ offices 2"
+            exit
+            vprn 1002 name "1002" customer 1 create
+                interface "to-vpls-1001" create
+                exit
+            exit
+            vprn 2002 name "2002" customer 2 create
+                interface "to-vpls-2001" create
+                exit
+            exit
+            vprn 3002 name "3002" customer 3 create
+                interface "to-vpls-3001" create
+                exit
+            exit
+            vprn 4002 name "4002" customer 4 create
+                interface "to-vpls-4001" create
+                exit
+            exit
+            vpls 1001 name "1001" customer 1 create
+                allow-ip-int-bind
+                exit
+                stp
+                    shutdown
+                exit
+                sap 1/1/1 create
+                    no shutdown
+                exit
+                no shutdown
+            exit
+            vpls 2001 name "2001" customer 2 create
+                allow-ip-int-bind
+                exit
+                stp
+                    shutdown
+                exit
+                sap 1/1/2 create
+                    no shutdown
+                exit
+                no shutdown
+            exit
+            vpls 3001 name "3001" customer 3 create
+                allow-ip-int-bind
+                exit
+                stp
+                    shutdown
+                exit
+                sap 1/1/3 create
+                    no shutdown
+                exit
+                no shutdown
+            exit
+            vpls 4001 name "4001" customer 4 create
+                allow-ip-int-bind
+                exit
+                stp
+                    shutdown
+                exit
+                sap 1/1/4 create
+                    no shutdown
+                exit
+                no shutdown
+            exit
+            vprn 1002 name "1002" customer 1 create
+                interface "to-vplsi-1001" create
+                    address 172.16.251.20/24
+                    vpls "1001"
+                    exit
+                exit
+                no shutdown
+            exit
+            vprn 2002 name "2002" customer 2 create
+                interface "to-vpls-2001" create
+                    address 172.16.252.20/24
+                    vpls "2001"
+                    exit
+                exit
+                no shutdown
+            exit
+            vprn 3002 name "3002" customer 3 create
+                interface "to-vpls-3001" create
+                    address 172.16.253.20/24
+                    vpls "3001"
+                    exit
+                exit
+                no shutdown
+            exit
+            vprn 4002 name "4002" customer 4 create
+                interface "to-vpls-4001" create
+                    address 172.16.254.20/24
+                    vpls "4001"
+                    exit
+                exit
+                no shutdown
+            exit
+            vpls 1001 name "1001" customer 1 create
+                allow-ip-int-bind
+                exit
+            exit
+            vpls 2001 name "2001" customer 2 create
+                allow-ip-int-bind
+                exit
+            exit
+            vpls 3001 name "3001" customer 3 create
+                allow-ip-int-bind
+                exit
+            exit
+            vpls 4001 name "4001" customer 4 create
+                allow-ip-int-bind
+                exit
+            exit
+        exit
+    #--------------------------------------------------
+    echo "Router (Service Side) Configuration"
+    #--------------------------------------------------
+        router Base
+        exit
+
+    #--------------------------------------------------
+    echo "Log all events for service vprn Configuration"
+    #--------------------------------------------------
+        log
+        exit
+
+    exit all
+
+    # Finished THU AUG 26 14:04:29 2021 UTC
+    '  
+      
+
