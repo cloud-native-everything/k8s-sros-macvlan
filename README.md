@@ -8,7 +8,7 @@ We assume you kubernetes cluster has been installed in advance
 Check https://github.com/cloud-native-everything/srlinux-ansible-lab for more details
 In case of using VMs for the k8s cluster, you will need to enable nested virtualization
 
-![Intended Topology] (https://www.cloud-native-everything.com/wp-content/uploads/2021/12/sros-pod-kubernetes-topology-macvlan-passthru.png)
+![Intended Topology](https://www.cloud-native-everything.com/wp-content/uploads/2021/12/sros-pod-kubernetes-topology-macvlan-passthru.png)
 
 ## Enable Nested Virtualization
 
